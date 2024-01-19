@@ -1,0 +1,97 @@
+A UML Object diagram is also provided in a JPEG file.
+Description of entities:
+
+Entity City:
+  -attributes: 
+    -name: string
+
+Entity Location:
+  -attributes:
+    -name: string
+
+Entity Musician:
+  -attributes:
+    -name: string
+    -blocks_worked: integer (min: 0, max: 2) # this is used to track how many consecutive block a musician has worked
+    -rank: integer (min: 1, max: 5)
+  -methods:
+    -increaseBlocksWorked()
+
+Entity Event:
+  -attributes:
+    -name: string
+    
+Entity Event_Block:
+  -attributes:
+    -time_block: string (morning or midday or afternoon)
+    
+Relationships with cardinalities:
+  -City, Location:
+    -Location: 1  # a location can be part of one and only one city
+    -City: 1.*  # a city must have at least one location
+
+  -Event, Event_Block:
+    -Event: 1.* (3)  # an event can have exactly 3 event blocks
+    -Event_Blocks: 1  # an event block can be part of one and only one event
+
+  -Event_Block, Musician:
+    -Event_Block: 1  # an event block must have one and only one musician 
+    -Musician: 0.*  # a musician can perform in no or many event blocks
+
+  -Event, Location:
+    -Event: 1  # an event must have a location 
+    -Location: 0.*  # a location can hold no or many events
+
+
+
+The following is the pseudo-code for the scheduler:
+
+function scheduleEvents():
+  # Get list of cities
+
+  FOR EACH city
+    
+    # Get all locations of a city
+
+    FOR EACH location
+      
+      # Find available musicians for each time block
+      morning_musician = findAvailableMusician("morning")
+      midday_musician = findAvailableMusician("midday")
+      afternoon_musician = findAvailableMusician("afternoon")
+
+      # Create the event if all blocks have a musician
+      createEvent(morining_block, midday_block, afternoon_block)
+
+
+function findAvailableMusician(time_block):
+  # Get the list of all musicians for the specified time block
+  musicians = getAvailableMusicians(time_block)
+  
+  # Sort the list of musicians by their rank in descending order
+  musicians = sortMusiciansByRank(musicians)
+  
+  # Increase the number of blocks worked by the musician
+  # If we were to schedule events for multiple days we would have to add another attribute
+  # for which day a musician has worked so he won't be scheduled for more than two consecutive blocks
+  musicians[0].increaseBlocksWorked()
+
+  RETURN musicians[0]
+
+
+function getAvailableMusicians(time_block):
+  # Get all musicians
+  all_musicians = getAllMusicians()
+
+  FOR EACH musician:
+    # Check if the musician is scheduled for the current block for another event.
+    # AND 
+    # Check if the musician can to be scheduled for another event block
+    # we don't have to keep track which blocks he was scheduled for because 
+    # we're scheduling for one day only.
+    IF isMusicianScheduledForBlock(musician, time_block) == false AND musician.blocksWorked < 2 THEN
+
+      # add 
+      available_musicians_list.add(musician)
+
+  RETURN available_musicians

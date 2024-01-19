@@ -1,0 +1,61 @@
+/* 
+  Don't change the styles right at the top of this file!
+  They're small style rules that are here for your reference.
+*/
+.flexbox {
+  display: "flex";
+}
+
+.grid {
+  display: "grid";
+}
+
+/* You can change or add any styles below this line. We've left
+   suggested selectors to help you out, but you don't have to use them, 
+   or you might have to modify them. If you see yellow squiggly lines, 
+   that's just your IDE warning you there's nothing in the rule, 
+   it won't break anything but you'll eventually fill them up. */
+
+section.challenge2 {
+  font-family: Verdana, sans-serif;
+  background-color: lightgray;
+  font-size: 1.5em;
+}
+
+.form {
+  padding: 12px;
+  font-family: serif;
+}
+
+.form > * {
+  margin: 6px;
+}
+
+.form > *:not(:has(input[type=checkbox])) {
+  display: block;
+}
+
+.checkboxGroup {
+  display: flex;
+  gap: 12px;
+}
+section.challenge2 button {
+  max-width: max-content;
+}
+
+.flexbox {
+  display: flex;
+  gap: 24px;
+}
+
+#disabledStyledButton:disabled {
+  color: red;
+}
+
+.grid {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 12px;
+  column-gap: 20px;
+}
